@@ -19,7 +19,7 @@ class LexiconABSA:
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")  # Load English tokenizer, tagger, parser and NER
         self.vader = SentimentIntensityAnalyzer()  # Load Vader sentiment analyzer
-        self.negations = {"not", "no", "never", "n't"}  # Common negetions
+        self.negations = {"not", "no", "never", "n't"}  # Common negetions (maybe add more later)
         self.emoji_map = {
             "💘": "love",
             "❤️": "love",
@@ -38,7 +38,7 @@ class LexiconABSA:
         doc = self.nlp(text)
         results = []
 
-        # Step 1: I identify aspects (simple: all nouns)
+        # Step 1: I identify the aspects
         aspects = [
             token for token in doc
             if token.pos_ in ["NOUN", "PROPN"] and token.text.lower() not in self.emoji_map.values()
@@ -48,7 +48,7 @@ class LexiconABSA:
         print("Noun phrases:", aspects)
 
         for aspect in aspects:
-            # Step 2: Find adjectives, adverbs or verbs related
+            # Step 2: I find the adjectives, adverbs or verbs related
             opinion_options = []
             related_verbs = []
             modifiers = []
