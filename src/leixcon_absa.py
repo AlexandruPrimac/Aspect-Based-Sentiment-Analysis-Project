@@ -23,18 +23,29 @@ class LexiconABSA:
         doc = self.nlp(text)
         results = []
 
-        # Step 1: Identify aspects (simple: all nouns)
+        # Step 1: I identify aspects (simple: all nouns)
         aspects = [token for token in doc if token.pos_ in ["NOUN", "PROPN"]]
+        print("Noun phrases:", aspects)
 
         for aspect in aspects:
-            # Step 2: Find adjectives or verbs related (simple proximity rule)
-            opinion_options = [t for t in aspect.lefts if t.pos_ == "ADJ"]
+            # Step 2: Find adjectives or verbs related
+            opinion_options = []
+
+            # Direct adjectives next to the aspect
+            opinion_options += [t for t in aspect.lefts if t.pos_ == "ADJ"]
             opinion_options += [t for t in aspect.rights if t.pos_ == "ADJ"]
 
-            if not opinion_options:
-                continue
+            # If the aspect is subject of a verb (nsubj), I check the verb’s children for adjectives
+            if aspect.dep_ == "nsubj" and aspect.head.pos_ in ["VERB", "AUX"]:
+                opinion_options += [t for t in aspect.head.children if t.pos_ == "ADJ"]
 
-            # Step 3: Get sentiment for each opinion word
+            # If the aspect's *head* is an adjective (copular construction), I use it directly
+            if aspect.head.pos_ == "ADJ":
+                opinion_options.append(aspect.head)
+
+            print(f"Aspect '{aspect.text}' → Adjectives found:", opinion_options)
+
+            # Step 3: I get sentiment for each opinion word
             for opinion in opinion_options:
                 vs = self.vader.polarity_scores(opinion.text)["compound"]
                 sentiment = (
