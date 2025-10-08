@@ -12,6 +12,7 @@ class AspectSentiment:
     sentiment: str
     confidence: float
     text_span: tuple = None
+    vader_breakdown: dict = None
 
 
 class LexiconABSA:
@@ -19,17 +20,31 @@ class LexiconABSA:
         self.nlp = spacy.load("en_core_web_sm")  # Load English tokenizer, tagger, parser and NER
         self.vader = SentimentIntensityAnalyzer()  # Load Vader sentiment analyzer
         self.negations = {"not", "no", "never", "n't"}  # Common negetions
+        self.emoji_map = {
+            "💘": "love",
+            "❤️": "love",
+            "😡": "angry",
+            "😢": "sad",
+            "😂": "laughing",
+            ":(": "sad",
+            ":)": "happy",
+            "😔": "sad"
+        }
 
     def analyze(self, text: str) -> List[AspectSentiment]:
+        for emo, word in self.emoji_map.items():
+            text = text.replace(emo, f" {word} ")
+
         doc = self.nlp(text)
         results = []
 
         # Step 1: I identify aspects (simple: all nouns)
         aspects = [token for token in doc if token.pos_ in ["NOUN", "PROPN"]]
+        print(f"Processed text: {text}")
         print("Noun phrases:", aspects)
 
         for aspect in aspects:
-            # Step 2: Find adjectives or verbs related
+            # Step 2: Find adjectives, adverbs or verbs related
             opinion_options = []
             related_verbs = []
             modifiers = []
@@ -61,9 +76,9 @@ class LexiconABSA:
 
             # Step 3: I get sentiment for each opinion word
             for opinion in opinion_options:
-                vs = self.vader.polarity_scores(opinion.text)["compound"]
+                vader_scores = self.vader.polarity_scores(opinion.text)
+                vs = vader_scores["compound"]  # keep all scores for results
 
-                # I check for negation words in children or one token to the left
                 # Check if negation near opinion
                 negs = [child.text for child in opinion.children if child.lower_ in self.negations]
                 if opinion.i > 0 and doc[opinion.i - 1].lower_ in self.negations:
@@ -75,12 +90,14 @@ class LexiconABSA:
                 sentiment = (
                     "positive" if vs > 0.05 else "negative" if vs < -0.05 else "neutral"
                 )
+
                 results.append(
                     AspectSentiment(
                         aspect=aspect.text,
                         sentiment=sentiment,
                         confidence=abs(vs),
                         text_span=(aspect.idx, aspect.idx + len(aspect.text)),
+                        vader_breakdown=vader_scores
                     )
                 )
 
