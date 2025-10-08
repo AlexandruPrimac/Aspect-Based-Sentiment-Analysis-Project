@@ -18,6 +18,7 @@ class LexiconABSA:
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")  # Load English tokenizer, tagger, parser and NER
         self.vader = SentimentIntensityAnalyzer()  # Load Vader sentiment analyzer
+        self.negations = {"not", "no", "never", "n't"}  # Common negetions
 
     def analyze(self, text: str) -> List[AspectSentiment]:
         doc = self.nlp(text)
@@ -30,6 +31,9 @@ class LexiconABSA:
         for aspect in aspects:
             # Step 2: Find adjectives or verbs related
             opinion_options = []
+            related_verbs = []
+            modifiers = []
+            negations_found = []
 
             # Direct adjectives next to the aspect
             opinion_options += [t for t in aspect.lefts if t.pos_ == "ADJ"]
@@ -37,17 +41,37 @@ class LexiconABSA:
 
             # If the aspect is subject of a verb (nsubj), I check the verb’s children for adjectives
             if aspect.dep_ == "nsubj" and aspect.head.pos_ in ["VERB", "AUX"]:
+                related_verbs.append(aspect.head)
                 opinion_options += [t for t in aspect.head.children if t.pos_ == "ADJ"]
 
             # If the aspect's *head* is an adjective (copular construction), I use it directly
             if aspect.head.pos_ == "ADJ":
                 opinion_options.append(aspect.head)
 
-            print(f"Aspect '{aspect.text}' → Adjectives found:", opinion_options)
+            # Collect nearby adverbs (modifiers)
+            for token in doc:
+                if token.pos_ == "ADV" and abs(token.i - aspect.i) <= 3:
+                    modifiers.append(token)
+
+            # Prints
+            print(f"\n--- Aspect: '{aspect.text}' ---")
+            print(f"  Related verbs:      {[t.text for t in related_verbs]}")
+            print(f"  Nearby adverbs:     {[t.text for t in modifiers]}")
+            print(f"  Related adjectives: {[t.text for t in opinion_options]}")
 
             # Step 3: I get sentiment for each opinion word
             for opinion in opinion_options:
                 vs = self.vader.polarity_scores(opinion.text)["compound"]
+
+                # I check for negation words in children or one token to the left
+                # Check if negation near opinion
+                negs = [child.text for child in opinion.children if child.lower_ in self.negations]
+                if opinion.i > 0 and doc[opinion.i - 1].lower_ in self.negations:
+                    negs.append(doc[opinion.i - 1].text)
+                if negs:
+                    vs = -vs
+                    print(f"  Negation affecting '{opinion.text}': {negs}")
+
                 sentiment = (
                     "positive" if vs > 0.05 else "negative" if vs < -0.05 else "neutral"
                 )
@@ -59,4 +83,5 @@ class LexiconABSA:
                         text_span=(aspect.idx, aspect.idx + len(aspect.text)),
                     )
                 )
+
         return results
