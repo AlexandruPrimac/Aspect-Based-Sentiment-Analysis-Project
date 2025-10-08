@@ -39,7 +39,11 @@ class LexiconABSA:
         results = []
 
         # Step 1: I identify aspects (simple: all nouns)
-        aspects = [token for token in doc if token.pos_ in ["NOUN", "PROPN"]]
+        aspects = [
+            token for token in doc
+            if token.pos_ in ["NOUN", "PROPN"] and token.text.lower() not in self.emoji_map.values()
+        ]
+
         print(f"Processed text: {text}")
         print("Noun phrases:", aspects)
 
@@ -78,6 +82,16 @@ class LexiconABSA:
             for opinion in opinion_options:
                 vader_scores = self.vader.polarity_scores(opinion.text)
                 vs = vader_scores["compound"]  # keep all scores for results
+
+                #  Intensifier & softener detection (adverb modifiers) !!!! idk if correct
+                for adv in modifiers:
+                    adv_lower = adv.text.lower()
+                    if adv_lower in ["very", "extremely", "really", "so", "super", "highly"]:
+                        vs *= 1.2
+                        print(f"  Intensifier found near '{opinion.text}': {adv.text} (+20%)")
+                    elif adv_lower in ["slightly", "somewhat", "barely", "a bit", "kind of"]:
+                        vs *= 0.8
+                        print(f"  Softener found near '{opinion.text}': {adv.text} (-20%)")
 
                 # Check if negation near opinion
                 negs = [child.text for child in opinion.children if child.lower_ in self.negations]
