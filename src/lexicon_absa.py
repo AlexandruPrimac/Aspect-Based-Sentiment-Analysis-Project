@@ -5,27 +5,20 @@ from typing import List
 import spacy
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-
-@dataclass
-class AspectSentiment:
-    aspect: str
-    sentiment: str
-    confidence: float
-    text_span: tuple = None
-    vader_breakdown: dict = None
+from src.base import ABSAAnalyzer, AspectSentiment  # import base interface
 
 
-class LexiconABSA:
+class LexiconABSA(ABSAAnalyzer):
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")  # Load English tokenizer, tagger, parser and NER
         self.vader = SentimentIntensityAnalyzer()  # Load Vader sentiment analyzer
         self.negations = {"not", "no", "never", "n't"}  # Common negetions (maybe add more later)
         self.emoji_map = {
-            "💘": "love",
-            "❤️": "love",
+            "💘": "very",
+            "❤️": "very",
             "😡": "angry",
             "😢": "sad",
-            "😂": "laughing",
+            "😂": "happy",
             ":(": "sad",
             ":)": "happy",
             "😔": "sad"
@@ -101,9 +94,12 @@ class LexiconABSA:
                     vs = -vs
                     print(f"  Negation affecting '{opinion.text}': {negs}")
 
-                sentiment = (
-                    "positive" if vs > 0.05 else "negative" if vs < -0.05 else "neutral"
-                )
+                if vs > 0.3:
+                    sentiment = "positive"
+                elif vs < -0.3:
+                    sentiment = "negative"
+                else:
+                    sentiment = "neutral"
 
                 results.append(
                     AspectSentiment(

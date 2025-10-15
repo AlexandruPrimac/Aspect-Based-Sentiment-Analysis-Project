@@ -9,21 +9,14 @@ from src.lexicon_absa import LexiconABSA
 
 
 # -----------------------------
-#  Initialize analyzer
-# -----------------------------
-def analyzer():
-    """Create one LexiconABSA instance for all tests."""
-    return LexiconABSA()
-
-
-# -----------------------------
 #  Automated Tests
 # -----------------------------
 
-def test_multiple_aspects(analyzer):
+def test_multiple_aspects():
     """
     Verify that multiple aspects are detected with correct sentiment polarity.
     """
+    analyzer = LexiconABSA()
     text = "The pizza was great but the service was bad."
     results = analyzer.analyze(text)
 
@@ -42,10 +35,11 @@ def test_multiple_aspects(analyzer):
     assert sentiments["service"] == "negative"
 
 
-def test_negation_handling(analyzer):
+def test_negation_handling():
     """
     Test that negations flip the expected sentiment polarity.
     """
+    analyzer = LexiconABSA()
     text = "The pizza was not good."
     results = analyzer.analyze(text)
     pizza_result = next((r for r in results if r.aspect == "pizza"), None)
@@ -55,10 +49,11 @@ def test_negation_handling(analyzer):
     assert pizza_result.confidence > 0.3
 
 
-def test_neutral_sentence(analyzer):
+def test_neutral_sentence():
     """
     Ensure neutral sentiment is correctly classified.
     """
+    analyzer = LexiconABSA()
     text = "The food was okay."
     results = analyzer.analyze(text)
     food_result = next((r for r in results if r.aspect == "food"), None)
@@ -67,10 +62,11 @@ def test_neutral_sentence(analyzer):
     assert food_result.sentiment == "neutral"
 
 
-def test_intensifier_effect(analyzer):
+def test_intensifier_effect():
     """
     Ensure adverbs like 'extremely' increase sentiment strength.
     """
+    analyzer = LexiconABSA()
     base_text = "The service was bad."
     intense_text = "The service was extremely bad."
 
@@ -80,20 +76,22 @@ def test_intensifier_effect(analyzer):
     assert intense_conf >= base_conf, "Intensifier should increase confidence"
 
 
-def test_emoji_handling(analyzer):
+def test_emoji_handling():
     """
     Verify that emojis are replaced and do not break the pipeline.
     """
+    analyzer = LexiconABSA()
     text = "The pizza was 💘 delicious."
     results = analyzer.analyze(text)
     assert any("pizza" in r.aspect for r in results)
     assert any(r.sentiment == "positive" for r in results)
 
 
-def test_vader_breakdown_structure(analyzer):
+def test_vader_breakdown_structure():
     """
     Check that vader_breakdown field contains all expected sentiment scores.
     """
+    analyzer = LexiconABSA()
     text = "The pizza was great."
     results = analyzer.analyze(text)
     breakdown = results[0].vader_breakdown
@@ -101,33 +99,3 @@ def test_vader_breakdown_structure(analyzer):
     assert isinstance(breakdown, dict)
     for key in ["neg", "neu", "pos", "compound"]:
         assert key in breakdown
-
-
-# -----------------------------
-#  Manual Demo (optional)
-# -----------------------------
-def run_demo():
-    """Prints results for multiple sample sentences."""
-    demo_texts = [
-        "The pizza was 💘 delicious but the service was terrible.",
-        "The pizza was not good.",
-        "The service isn't bad.",
-        "He playfully good football.",
-        "The pizza was not very good but the service was extremely bad.",
-        "The pizza was not very good :(, but the service was extremely bad.",
-    ]
-
-    analyzer = LexiconABSA()
-    for text in demo_texts:
-        print("\n===============================")
-        print(f"Text: {text}")
-        results = analyzer.analyze(text)
-        for r in results:
-            print(f"Aspect: {r.aspect:10s} | Sentiment: {r.sentiment:8s} | Confidence: {r.confidence:.2f}")
-            print(f"   VADER scores: {r.vader_breakdown}")
-        print("===============================")
-
-
-if __name__ == "__main__":
-    # Allow running manually for visual inspection
-    run_demo()
