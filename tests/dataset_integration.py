@@ -5,6 +5,9 @@ Also prints full VADER sentiment breakdown for transparency.
 """
 
 import sys, os, json
+
+from src.transformer_absa import TransformerABSA
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.lexicon_absa import LexiconABSA
@@ -22,7 +25,7 @@ def main():
     with open(data_path, "r", encoding="utf-8") as f:
         samples = json.load(f)
 
-    analyzer = LexiconABSA()
+    analyzer = TransformerABSA()
 
     total = 0
     correct = 0
