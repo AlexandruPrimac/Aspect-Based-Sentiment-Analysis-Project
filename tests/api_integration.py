@@ -1,24 +1,77 @@
-from src.base import ABSAAnalyzer
+"""
+Runs the each one of the three implementations on the test_samples.json dataset
+and compares results with expected sentiments.
+"""
+
+import sys, os, json
+
+from src.transformer_absa import TransformerABSA
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.lexicon_absa import LexiconABSA
 
 
 def main():
-    analyzer = LexiconABSA()
-    assert isinstance(analyzer, ABSAAnalyzer), "LexiconABSA should inherit from ABSAAnalyzer"
+    # Locate and load dataset
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+    data_path = os.path.join(project_root, "data", "test_samples.json")
 
-    text = "The pizza was delicious but the service was terrible."
-    results = analyzer.analyze(text)
+    if not os.path.exists(data_path):
+        print(f" Dataset not found: {data_path}")
+        return
 
-    # Print results
-    print("\nUnified API Test:")
-    for r in results:
-        print(f"Aspect: {r.aspect:10s} | Sentiment: {r.sentiment:8s} | Confidence: {r.confidence:.2f}")
+    with open(data_path, "r", encoding="utf-8") as f:
+        samples = json.load(f)
 
-    # Check expected structure
-    assert all(hasattr(r, "aspect") for r in results)
-    assert all(hasattr(r, "sentiment") for r in results)
-    assert all(hasattr(r, "confidence") for r in results)
-    print("\n Unified API works correctly for LexiconABSA!")
+    analyzer = TransformerABSA() ### Changeable for each of the three implementation I have rn
+
+    total = 0
+    correct = 0
+
+    print(f"\n=== Running Dataset Evaluation using {analyzer.__class__.__name__} ===")
+
+    for sample in samples:
+        text = sample["text"]
+        expected = sample["expected"]
+
+        print("\n────────────────────────────────────")
+        print(f"Text: {text}")
+
+        # Run your analyzer
+        results = analyzer.analyze(text)
+
+        # Make aspect → sentiment map
+        result_map = {r.aspect.lower(): r for r in results}
+
+        # Print details per aspect
+        for exp in expected:
+            aspect = exp["aspect"].lower()
+            exp_sent = exp["sentiment"]
+
+            # Get result object if exists
+            pred_result = result_map.get(aspect)
+            if pred_result:
+                pred_sent = pred_result.sentiment
+                vader = pred_result.vader_breakdown
+                print(f"  Aspect: {aspect:15s} | Expected: {exp_sent:8s} | Predicted: {pred_sent:8s} | {'✅' if exp_sent == pred_sent else '❌'}")
+                print(f"     Confidence: {pred_result.confidence:.2f}")
+                if vader:
+                    print(f"     → VADER scores: {vader}")
+
+            else:
+                pred_sent = "missing"
+                print(f"  Aspect: {aspect:15s} | Expected: {exp_sent:8s} | Predicted: missing | ❌")
+
+            total += 1
+            correct += int(exp_sent == pred_sent)
+
+
+    accuracy = correct / total if total else 0
+    print("\n────────────────────────────────────")
+    print(f"Overall accuracy: {accuracy:.2%} ({correct}/{total} correct)")
+    print("====================================\n")
+
 
 if __name__ == "__main__":
     main()
