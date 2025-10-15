@@ -1,0 +1,174 @@
+[
+  {
+    "text": "The pizza was delicious but the service was terrible.",
+    "expected": [
+      {"aspect": "pizza", "sentiment": "positive"},
+      {"aspect": "service", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The food was not good.",
+    "expected": [
+      {"aspect": "food", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The service isn't bad.",
+    "expected": [
+      {"aspect": "service", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "The room was okay but the bathroom was dirty.",
+    "expected": [
+      {"aspect": "room", "sentiment": "neutral"},
+      {"aspect": "bathroom", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The phone has great battery life but the camera quality is poor.",
+    "expected": [
+      {"aspect": "battery life", "sentiment": "positive"},
+      {"aspect": "camera", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The laptop runs fast but the fan is so loud that it's annoying.",
+    "expected": [
+      {"aspect": "laptop", "sentiment": "positive"},
+      {"aspect": "fan", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The movie was long and boring, but the soundtrack was beautiful.",
+    "expected": [
+      {"aspect": "movie", "sentiment": "negative"},
+      {"aspect": "soundtrack", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "The coffee was too hot to drink, but it tasted amazing once it cooled down.",
+    "expected": [
+      {"aspect": "coffee", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "The restaurant decor is nice, but the food is overpriced for the quality.",
+    "expected": [
+      {"aspect": "decor", "sentiment": "positive"},
+      {"aspect": "food", "sentiment": "negative"},
+      {"aspect": "price", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The service was absolutely outstanding, and the staff made us feel like royalty.",
+    "expected": [
+      {"aspect": "service", "sentiment": "positive"},
+      {"aspect": "staff", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "I waited an hour for my food, but at least it was cold when it finally arrived.",
+    "expected": [
+      {"aspect": "food", "sentiment": "negative"},
+      {"aspect": "service", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The book was not terrible, but it wasn’t great either.",
+    "expected": [
+      {"aspect": "book", "sentiment": "neutral"}
+    ]
+  },
+  {
+    "text": "The Wi-Fi is painfully slow, and the connection drops every few minutes.",
+    "expected": [
+      {"aspect": "Wi-Fi", "sentiment": "negative"},
+      {"aspect": "connection", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The hotel view was breathtaking, but the bed was as hard as a rock.",
+    "expected": [
+      {"aspect": "view", "sentiment": "positive"},
+      {"aspect": "bed", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The phone is not only fast but also extremely stylish.",
+    "expected": [
+      {"aspect": "phone", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "The customer support team solved my issue in minutes. Incredible experience!",
+    "expected": [
+      {"aspect": "customer support", "sentiment": "positive"},
+      {"aspect": "experience", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "The speaker volume is not high enough, and the bass feels weak.",
+    "expected": [
+      {"aspect": "volume", "sentiment": "negative"},
+      {"aspect": "bass", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The movie was a true masterpiece, except for the ending, which ruined everything.",
+    "expected": [
+      {"aspect": "movie", "sentiment": "positive"},
+      {"aspect": "ending", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "I love how the app looks, but it crashes every single time I open it.",
+    "expected": [
+      {"aspect": "design", "sentiment": "positive"},
+      {"aspect": "app", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The pizza was so burnt I could use it as a frisbee. Great job, chef!",
+    "expected": [
+      {"aspect": "pizza", "sentiment": "negative"},
+      {"aspect": "chef", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The teacher was super helpful, and the lessons were easy to follow.",
+    "expected": [
+      {"aspect": "teacher", "sentiment": "positive"},
+      {"aspect": "lessons", "sentiment": "positive"}
+    ]
+  },
+  {
+    "text": "The TV picture quality is decent, but the sound is terrible.",
+    "expected": [
+      {"aspect": "picture quality", "sentiment": "neutral"},
+      {"aspect": "sound", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The website design looks modern, but the navigation is confusing and slow.",
+    "expected": [
+      {"aspect": "design", "sentiment": "positive"},
+      {"aspect": "navigation", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The packaging was impressive, but the product inside was broken.",
+    "expected": [
+      {"aspect": "packaging", "sentiment": "positive"},
+      {"aspect": "product", "sentiment": "negative"}
+    ]
+  },
+  {
+    "text": "The waiter was nice, but the food gave me food poisoning. Great evening!",
+    "expected": [
+      {"aspect": "waiter", "sentiment": "positive"},
+      {"aspect": "food", "sentiment": "negative"},
+      {"aspect": "evening", "sentiment": "negative"}
+    ]
+  }
+]
