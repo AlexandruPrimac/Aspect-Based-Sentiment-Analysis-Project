@@ -5,7 +5,7 @@ from typing import List
 import spacy
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-from src.base import ABSAAnalyzer, AspectSentiment  # import base interface
+from src.base import ABSAAnalyzer, AspectSentiment
 
 
 class LexiconABSA(ABSAAnalyzer):
@@ -14,14 +14,27 @@ class LexiconABSA(ABSAAnalyzer):
         self.vader = SentimentIntensityAnalyzer()  # Load Vader sentiment analyzer
         self.negations = {"not", "no", "never", "n't"}  # Common negetions (maybe add more later)
         self.emoji_map = {
-            "💘": "very",
-            "❤️": "very",
+            "💘": "love",
+            "❤️": "love",
+            "💕": "love",
+            "😍": "love",
+            "😘": "love",
             "😡": "angry",
+            "🤬": "furious",
             "😢": "sad",
-            "😂": "happy",
+            "😭": "crying",
+            "😂": "laughing",
+            "🤣": "laughing",
+            "😔": "sad",
+            "🙂": "smile",
+            "😊": "smile",
+            ":)": "smile",
             ":(": "sad",
-            ":)": "happy",
-            "😔": "sad"
+            ":/": "disappointed",
+            "😒": "annoyed",
+            "😩": "tired",
+            "😃": "happy",
+            "😆": "happy",
         }
 
     def analyze(self, text: str) -> List[AspectSentiment]:
@@ -45,7 +58,6 @@ class LexiconABSA(ABSAAnalyzer):
             opinion_options = []
             related_verbs = []
             modifiers = []
-            negations_found = []
 
             # Direct adjectives next to the aspect
             opinion_options += [t for t in aspect.lefts if t.pos_ == "ADJ"]

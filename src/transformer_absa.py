@@ -1,6 +1,6 @@
 """
 Implementation 2: Transformer-Based ABSA using pre-trained model
-Uses yangheng/deberta-v3-base-absa-v1.1 from Hugging Face with pipeline API
+Uses yangheng/deberta-v3-base-absa-v1.1 from Hugging Face
 """
 
 from typing import List
@@ -20,7 +20,7 @@ class TransformerABSA(ABSAAnalyzer):
 
     def __init__(self, model_name: str = "yangheng/deberta-v3-base-absa-v1.1", device: int = None):
         """
-        Initialize the transformer-based ABSA model using pipeline.
+        Initialize the transformer-based ABSA model.
 
         Args:
             model_name: HuggingFace model identifier
@@ -40,7 +40,7 @@ class TransformerABSA(ABSAAnalyzer):
         device_name = f"cuda:{device}" if device >= 0 else "cpu"
         print(f"Using device: {device_name}")
 
-        # Load classifier using pipeline API (much simpler!)
+        # Load classifier using pipeline API
         self.classifier = pipeline(
             "text-classification",
             model=model_name,
@@ -51,10 +51,8 @@ class TransformerABSA(ABSAAnalyzer):
 
     def _extract_candidate_aspects(self, text: str) -> List[tuple]:
         """
-        Extract candidate aspects from text using simple NLP heuristics.
+        Extract candidate aspects from text.
         Returns list of (aspect_text, start_pos, end_pos) tuples.
-
-        For better results, integrate with your spaCy implementation from Part 1.
         """
         import re
 
@@ -241,38 +239,38 @@ class TransformerABSA(ABSAAnalyzer):
 
 
 # Example usage
-if __name__ == "__main__":
-    # Initialize the analyzer
-    analyzer = TransformerABSA()
-
-    # Example 1: Your example sentence
-    sentence = "The food was exceptional, although the service was a bit slow."
-    print(f"\nAnalyzing: '{sentence}'")
-
-    # Method 1: Analyze with specific aspects
-    aspects = ["food", "service"]
-    results = analyzer.analyze_with_aspects(sentence, aspects)
-    for result in results:
-        print(f"  {result}")
-
-    # Example 2: Auto-extract aspects
-    text2 = "The pizza was delicious but the service was terrible."
-    print(f"\nAnalyzing: '{text2}' (auto-extract)")
-    results2 = analyzer.analyze(text2)
-    for result in results2:
-        print(f"  {result}")
-
-    # Example 3: Batch processing (faster for multiple aspects)
-    text3 = "The laptop has amazing battery life, great performance, but the screen quality is disappointing."
-    aspects3 = ["battery life", "performance", "screen quality", "laptop"]
-    print(f"\nAnalyzing: '{text3}' (batch)")
-    results3 = analyzer.analyze_batch(text3, aspects3)
-    for result in results3:
-        print(f"  {result}")
-
-    # Example 4: Complex review
-    text4 = "Great ambiance and fantastic food, but overpriced and slow service."
-    print(f"\nAnalyzing: '{text4}'")
-    results4 = analyzer.analyze(text4)
-    for result in results4:
-        print(f"  {result}")
+# if __name__ == "__main__":
+#     # Initialize the analyzer
+#     analyzer = TransformerABSA()
+#
+#     # Example 1: Your example sentence
+#     sentence = "The food was exceptional, although the service was a bit slow."
+#     print(f"\nAnalyzing: '{sentence}'")
+#
+#     # Method 1: Analyze with specific aspects
+#     aspects = ["food", "service"]
+#     results = analyzer.analyze_with_aspects(sentence, aspects)
+#     for result in results:
+#         print(f"  {result}")
+#
+#     # Example 2: Auto-extract aspects
+#     text2 = "The pizza was delicious but the service was terrible."
+#     print(f"\nAnalyzing: '{text2}' (auto-extract)")
+#     results2 = analyzer.analyze(text2)
+#     for result in results2:
+#         print(f"  {result}")
+#
+#     # Example 3: Batch processing (faster for multiple aspects)
+#     text3 = "The laptop has amazing battery life, great performance, but the screen quality is disappointing."
+#     aspects3 = ["battery life", "performance", "screen quality", "laptop"]
+#     print(f"\nAnalyzing: '{text3}' (batch)")
+#     results3 = analyzer.analyze_batch(text3, aspects3)
+#     for result in results3:
+#         print(f"  {result}")
+#
+#     # Example 4: Complex review
+#     text4 = "Great ambiance and fantastic food, but overpriced and slow service."
+#     print(f"\nAnalyzing: '{text4}'")
+#     results4 = analyzer.analyze(text4)
+#     for result in results4:
+#         print(f"  {result}")

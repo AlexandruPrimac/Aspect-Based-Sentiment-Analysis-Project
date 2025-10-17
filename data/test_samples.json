@@ -1,13 +1,13 @@
 [
   {
-    "text": "The pizza was delicious but the service was terrible.",
+    "text": "The pizza was very delicious but the service was terrible.",
     "expected": [
       {"aspect": "pizza", "sentiment": "positive"},
       {"aspect": "service", "sentiment": "negative"}
     ]
   },
   {
-    "text": "The food was not good.",
+    "text": "The food was not good :(.",
     "expected": [
       {"aspect": "food", "sentiment": "negative"}
     ]
@@ -53,7 +53,7 @@
     ]
   },
   {
-    "text": "The restaurant decor is nice, but the food is overpriced for the quality.",
+    "text": "The restaurant decor is nice, but the food is overpriced for the quality :/.",
     "expected": [
       {"aspect": "decor", "sentiment": "positive"},
       {"aspect": "food", "sentiment": "negative"},

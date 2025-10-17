@@ -24,7 +24,7 @@ def main():
     with open(data_path, "r", encoding="utf-8") as f:
         samples = json.load(f)
 
-    analyzer = TransformerABSA() ### Changeable for each of the three implementation I have rn
+    analyzer = LexiconABSA() ### Changeable for each of the two implementation I have rn
 
     total = 0
     correct = 0
