@@ -5,11 +5,14 @@ and compares results with expected sentiments.
 
 import sys, os, json
 
+# Available implementations
+from src.llm_absa import OllamaABSA
 from src.transformer_absa import TransformerABSA
+from src.lexicon_absa import LexiconABSA
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.lexicon_absa import LexiconABSA
+
 
 
 def main():
@@ -24,7 +27,7 @@ def main():
     with open(data_path, "r", encoding="utf-8") as f:
         samples = json.load(f)
 
-    analyzer = TransformerABSA() ### Changeable for each of the two implementations I have rn
+    analyzer = OllamaABSA() ### Changeable for each of the two implementations I have rn
 
     total = 0
     correct = 0
