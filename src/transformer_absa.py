@@ -21,7 +21,7 @@ class TransformerABSA(ABSAAnalyzer):
 
     def _extract_aspects(self, text: str) -> List[str]:
         """
-        Very simple aspect extraction: pick likely nouns or noun phrases. simple at the moment, expand later if good
+        Very simple aspect extraction: pick likely nouns or noun phrases. simple at the moment, expand later if its good
         """
         import re
         stop_words = {"the", "a", "an", "and", "is", "are", "was", "were", "but", "or"}
