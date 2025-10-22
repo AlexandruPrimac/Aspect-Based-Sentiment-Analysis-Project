@@ -169,11 +169,10 @@
     ]
   },
   {
-    "text": "The waiter was nice, but the food gave me food poisoning.",
+    "text": "The waiter was nice, but the food gave me food poisoning. Great Evening!",
     "expected": [
       {"aspect": "waiter", "sentiment": "positive"},
       {"aspect": "food", "sentiment": "negative"}
-    ],
-    "note": "FIXED: Removed sarcastic 'Great evening!'"
+    ]
   }
 ]
