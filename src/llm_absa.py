@@ -16,7 +16,7 @@ class OllamaABSA(ABSAAnalyzer):
 
     def __init__(
             self,
-            model_name: str = "gemma3:1b",
+            model_name: str = "deepseek-v3.1:671b-cloud",
             host: str = "http://localhost:11434",
             temperature: float = 0.2,
             max_retries: int = 2,
@@ -48,19 +48,19 @@ class OllamaABSA(ABSAAnalyzer):
         Sends the text to a local Ollama LLM and returns a list of AspectSentiment objects.
         """
         prompt = f"""You are an aspect-based sentiment analyzer.
-Extract every aspect mentioned in the text and classify its sentiment as positive, negative, or neutral.
-Also provide a confidence score between 0 and 1.
+        Extract every aspect mentioned in the text and classify its sentiment as positive, negative, or neutral.
+        Also provide a confidence score between 0 and 1.
 
-Return ONLY valid JSON like this:
-{{
-  "aspects": [
-    {{"aspect": "pizza", "sentiment": "positive", "confidence": 0.95}},
-    {{"aspect": "service", "sentiment": "negative", "confidence": 0.90}}
-  ]
-}}
+        Return ONLY valid JSON like this:
+        {{
+            "aspects": [
+        {{"aspect": "pizza", "sentiment": "positive", "confidence": 0.95}},
+        {{"aspect": "service", "sentiment": "negative", "confidence": 0.90}}
+        ]
+        }}
 
-Text: "{text}"
-"""
+        Text: "{text}"
+        """
 
         payload = {
             "model": self.model_name,
@@ -138,7 +138,7 @@ Text: "{text}"
         parsed = []
         for a in aspects:
             if "aspect" in a and "sentiment" in a:
-                # Add confidence score (use 1.0 for LLM-based predictions or extract if provided)
+                # Confidence score (use 1.0 for LLM-based predictions or extract if provided)
                 confidence = a.get("confidence", 1.0)
                 parsed.append(AspectSentiment(a["aspect"], a["sentiment"], confidence))
             else:
