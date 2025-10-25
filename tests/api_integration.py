@@ -10,6 +10,7 @@ same interface, verifying that results are comparable and consistent.
 import json
 import os
 import sys
+import time
 
 # -------------------------------------------------------------------------
 # Adjust the Python path so imports work correctly no matter where script runs.
@@ -74,9 +75,13 @@ def main():
 
     # ---------------------------------------------------------------------
     # Locate and load the dataset (stored under /data/test_samples.json)
+    # Choose what dataset you want: test(faster) or evaluation(slower)
     # ---------------------------------------------------------------------
+    # project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+    # data_path = os.path.join(project_root, "data", "test_samples.json")
+
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-    data_path = os.path.join(project_root, "data", "test_samples.json")
+    data_path = os.path.join(project_root, "data", "evaluation_data.json")
 
     if not os.path.exists(data_path):
         print(f" Dataset not found: {data_path}")
@@ -89,12 +94,17 @@ def main():
     # Select which ABSA implementation to evaluate.
     # Swap between OllamaABSA(), TransformerABSA(), or LexiconABSA() as needed.
     # ---------------------------------------------------------------------
-    analyzer = TransformerABSA()  # Change here to test other implementations
+    analyzer = OllamaABSA()  # Change here to test other implementations
 
     total = 0
     correct = 0
 
     print(f"\n=== Running Dataset Evaluation using {analyzer.__class__.__name__} ===")
+
+    # ---------------------------------------------------------------------
+    # Start timing for full evaluation
+    # ---------------------------------------------------------------------
+    start_time = time.time()
 
     # ---------------------------------------------------------------------
     # Iterate over all dataset samples
@@ -111,6 +121,14 @@ def main():
 
         # Run analyzer using the unified API
         results = analyzer.analyze(text)
+
+        # Record time for each individual sample (optional)
+        sample_start = time.time()
+        results = analyzer.analyze(text)
+        sample_end = time.time()
+
+        sample_duration = sample_end - sample_start
+        print(f" Processing time: {sample_duration:.2f}s")
 
         # Skip gracefully if model fails to produce any output
         if not results:
@@ -151,10 +169,16 @@ def main():
 
     # ---------------------------------------------------------------------
     # Compute global accuracy metric
-    # ---------------------------------------------------------------------
+    # ---------------------------------------------------------------------\
+    end_time = time.time()
+    total_duration = end_time - start_time
+    avg_duration = total_duration / len(samples) if samples else 0
     accuracy = correct / total if total else 0.0
+
     print("\n────────────────────────────────────")
     print(f"Overall accuracy: {accuracy:.2%} ({correct}/{total} correct)")
+    print(f"Total runtime: {total_duration:.2f} seconds")
+    print(f"Average time per sample: {avg_duration:.2f} seconds")
     print("====================================\n")
 
 
