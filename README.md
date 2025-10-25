@@ -39,18 +39,12 @@ git clone https://gitlab.com/AlexandruPrimac/dataai6-llm-sentiment-project-prima
 cd dataai6-llm-sentiment-project-primac-alexandru
 ```
 
-### 2. Create and activate a virtual environment
-```bash
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-```
-
-### 3. Install dependencies
+### 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Download NLP model and datasets
+### 3. Download NLP model and datasets
 ```bash
 python -m spacy download en_core_web_sm
 ```
