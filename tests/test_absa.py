@@ -99,3 +99,5 @@ def test_vader_breakdown_structure():
     assert isinstance(breakdown, dict)
     for key in ["neg", "neu", "pos", "compound"]:
         assert key in breakdown
+
+

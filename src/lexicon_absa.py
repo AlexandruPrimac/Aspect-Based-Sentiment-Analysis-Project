@@ -1,32 +1,40 @@
-# src/lexicon_absa.py
 """
 Lexicon-based ABSA implementation using spaCy + VADER.
-- Extracts noun phrases as aspects
-- Associates each aspect with nearby adjectives or verbs
-- Handles negations, intensifiers, softenings, and emojis
-- Aggregates results for cleaner structured output
+
+This implementation focuses on extracting noun-based aspects
+and linking them with nearby opinion words (adjectives or verbs)
+to infer sentiment polarity.
+
+I went for a "hybrid linguistic + lexicon" approach:
+- spaCy is used for syntactic/dependency structure
+- VADER is used for sentiment polarity scoring
+- I added manual adjustments for intensifiers, softeners, and negations
+- Emoji normalization helps capture informal signals in real-world text
 """
 
-from dataclasses import dataclass
 from typing import List
 import spacy
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 from src.base import ABSAAnalyzer, AspectSentiment
+from src.utils import has_negation, aggregate_results
 
 
 class LexiconABSA(ABSAAnalyzer):
     def __init__(self, debug: bool = False):
+        # Load spaCy model for tokenization, POS tagging, and dependency parsing
         self.nlp = spacy.load("en_core_web_sm")
+
+        # VADER is a lexicon-based sentiment analyzer tuned for social text
         self.vader = SentimentIntensityAnalyzer()
         self.debug = debug
 
-        # Negations, intensifiers, and softeners
+        # Define linguistic cues and modifiers
         self.negations = {"not", "no", "never", "n't"}
         self.intensifiers = {"very", "extremely", "really", "so", "super", "highly", "too"}
         self.softeners = {"slightly", "somewhat", "barely", "a bit", "kind of", "rather"}
 
-        # Emoji mapping for pre-normalization
+        # Map emojis to sentiment-related words (pre-normalization step)
         self.emoji_map = {
             "💘": "love", "❤️": "love", "💕": "love", "😍": "love", "😘": "love",
             "😡": "angry", "🤬": "furious", "😢": "sad", "😭": "crying", "😂": "laughing",
@@ -35,14 +43,15 @@ class LexiconABSA(ABSAAnalyzer):
             "😃": "happy", "😆": "happy"
         }
 
-    # -------------------------- #
-    #  Main ABSA Analysis Method #
-    # -------------------------- #
+    # ------------------------------------------------------------- #
+    # Main ABSA method
+    # ------------------------------------------------------------- #
     def analyze(self, text: str) -> List[AspectSentiment]:
-        # Replace emojis with mapped words for lexical analyzers
+        # Replace emojis with words so VADER can recognize them
         for emo, word in self.emoji_map.items():
             text = text.replace(emo, f" {word} ")
 
+        # Process text with spaCy NLP
         doc = self.nlp(text)
         results = []
 
@@ -56,18 +65,15 @@ class LexiconABSA(ABSAAnalyzer):
             print(f"\nProcessed text: {text}")
             print("Extracted aspects:", [a.text for a in aspects])
 
-        # STEP 2 — Find related opinion words using dependency parsing
+        # STEP 2 — Find opinion words related to aspects
         pairs = []
         for token in doc:
-            # adjectival modifier: good food
             if token.dep_ == "amod" and token.head.pos_ in ("NOUN", "PROPN"):
                 pairs.append((token.head, token))
-            # adjectival complement: food is good
             elif token.dep_ == "acomp" and token.head.pos_ in ("VERB", "AUX"):
                 for subj in token.head.children:
                     if subj.dep_ in ("nsubj", "nsubjpass"):
                         pairs.append((subj, token))
-            # verb opinions: camera disappoints
             elif token.pos_ == "VERB":
                 for subj in token.children:
                     if subj.dep_ in ("nsubj", "nsubjpass") and subj.pos_ in ("NOUN", "PROPN"):
@@ -82,7 +88,7 @@ class LexiconABSA(ABSAAnalyzer):
             vader_scores = self.vader.polarity_scores(opinion_phrase)
             vs = vader_scores["compound"]
 
-            # Intensifiers / softeners near the opinion
+            # Adjust for intensifiers/softeners nearby
             modifiers = [t for t in doc if t.pos_ == "ADV" and abs(t.i - opinion.i) <= 3]
             for adv in modifiers:
                 adv_lower = adv.text.lower()
@@ -95,13 +101,13 @@ class LexiconABSA(ABSAAnalyzer):
                     if self.debug:
                         print(f"  Softener near '{opinion.text}': {adv.text} (-20%)")
 
-            # Negation detection via dependency relations
-            if self._has_negation(opinion):
+            # Negation handling
+            if has_negation(opinion, negation_words=self.negations):
                 vs = -vs
                 if self.debug:
                     print(f"  Negation flips sentiment near '{opinion.text}'")
 
-            # Clamp and classify sentiment
+            # Clamp and classify
             vs = max(min(vs, 1.0), -1.0)
             if vs > 0.3:
                 sentiment = "positive"
@@ -112,7 +118,6 @@ class LexiconABSA(ABSAAnalyzer):
 
             confidence = min(1.0, abs(vs) + 0.1 * len(modifiers))
 
-            # Handle Token vs Span differences
             if hasattr(aspect, "start_char"):
                 start = aspect.start_char
                 end = aspect.end_char
@@ -129,8 +134,8 @@ class LexiconABSA(ABSAAnalyzer):
             )
             results.append(result)
 
-        # STEP 4 — Aggregate by aspect (keep highest-confidence sentiment)
-        final_results = self._aggregate_results(results)
+        # STEP 4 — Aggregate results (keep highest-confidence per aspect)
+        final_results = aggregate_results(results)
 
         if self.debug:
             print("\nFinal aggregated results:")
@@ -138,25 +143,3 @@ class LexiconABSA(ABSAAnalyzer):
                 print(f"  {r.aspect:<15} → {r.sentiment} ({r.confidence:.2f})")
 
         return final_results
-
-    # -------------------------- #
-    #      Helper Functions      #
-    # -------------------------- #
-    def _has_negation(self, token):
-        """Detect if a token or its head has a negation dependency nearby."""
-        if any(child.dep_ == "neg" for child in token.children):
-            return True
-        if token.head is not None and any(child.dep_ == "neg" for child in token.head.children):
-            return True
-        if token.i > 0 and token.doc[token.i - 1].lower_ in self.negations:
-            return True
-        return False
-
-    def _aggregate_results(self, results: List[AspectSentiment]) -> List[AspectSentiment]:
-        """Aggregate multiple opinions for same aspect, keep highest confidence."""
-        merged = {}
-        for r in results:
-            key = r.aspect.lower()
-            if key not in merged or r.confidence > merged[key].confidence:
-                merged[key] = r
-        return list(merged.values())
