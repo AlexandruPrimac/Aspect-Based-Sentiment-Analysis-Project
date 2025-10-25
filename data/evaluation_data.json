@@ -886,5 +886,249 @@
         "sentiment": "negative"
       }
     ]
+  },
+  {
+    "text": "The waiter forgot our order twice, but at least he smiled while doing it.",
+    "expected": [
+      { "aspect": "waiter", "sentiment": "negative" },
+      { "aspect": "service", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The battery life is incredible—if you don’t actually use the phone.",
+    "expected": [
+      { "aspect": "battery life", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The meeting could’ve been an email, but at least the coffee was strong.",
+    "expected": [
+      { "aspect": "meeting", "sentiment": "negative" },
+      { "aspect": "coffee", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The app interface is so intuitive, even my grandma figured it out instantly!",
+    "expected": [
+      { "aspect": "interface", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The gym was empty, probably because no one wants to work out in the dark.",
+    "expected": [
+      { "aspect": "lighting", "sentiment": "negative" },
+      { "aspect": "gym", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The teacher’s jokes were as funny as a math exam.",
+    "expected": [
+      { "aspect": "teacher", "sentiment": "negative" },
+      { "aspect": "humor", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The salad was fresh, but the dressing tasted like sadness.",
+    "expected": [
+      { "aspect": "salad", "sentiment": "positive" },
+      { "aspect": "dressing", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The movie had stunning visuals but a plot that made no sense.",
+    "expected": [
+      { "aspect": "visuals", "sentiment": "positive" },
+      { "aspect": "plot", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The bed was so soft I almost missed my flight.",
+    "expected": [
+      { "aspect": "bed", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The manager handled the complaint perfectly, no notes.",
+    "expected": [
+      { "aspect": "manager", "sentiment": "positive" },
+      { "aspect": "customer service", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The app keeps crashing—great job, developers!",
+    "expected": [
+      { "aspect": "app", "sentiment": "negative" },
+      { "aspect": "developers", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The service was fast, but the waiter forgot half the order.",
+    "expected": [
+      { "aspect": "service", "sentiment": "negative" },
+      { "aspect": "waiter", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The vacation was relaxing until my luggage decided to stay in another country.",
+    "expected": [
+      { "aspect": "vacation", "sentiment": "positive" },
+      { "aspect": "luggage", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The class was boring, but I guess that’s what economics is about.",
+    "expected": [
+      { "aspect": "class", "sentiment": "negative" },
+      { "aspect": "subject", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The Wi-Fi works great if you sit exactly 2 cm away from the router.",
+    "expected": [
+      { "aspect": "Wi-Fi", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The product description promised magic, but all I got was plastic.",
+    "expected": [
+      { "aspect": "product", "sentiment": "negative" },
+      { "aspect": "description", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The dinner portions were small, but at least the plate looked fancy.",
+    "expected": [
+      { "aspect": "portion size", "sentiment": "negative" },
+      { "aspect": "presentation", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The keyboard lights are cool, but the keys sound like a machine gun.",
+    "expected": [
+      { "aspect": "lighting", "sentiment": "positive" },
+      { "aspect": "noise", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The smartphone camera is fine if you enjoy pixelated art.",
+    "expected": [
+      { "aspect": "camera", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The server was slow, but hey, patience builds character.",
+    "expected": [
+      { "aspect": "service", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The gym trainer was rude but gave me the best workout plan ever.",
+    "expected": [
+      { "aspect": "trainer", "sentiment": "mixed" },
+      { "aspect": "workout plan", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The food wasn’t terrible, but I wouldn’t eat it again.",
+    "expected": [
+      { "aspect": "food", "sentiment": "neutral" }
+    ]
+  },
+  {
+    "text": "The email support replied quickly—with zero helpful information.",
+    "expected": [
+      { "aspect": "support", "sentiment": "negative" },
+      { "aspect": "response time", "sentiment": "positive" }
+    ]
+  },
+  {
+    "text": "The new phone feels premium but overheats faster than my old laptop.",
+    "expected": [
+      { "aspect": "build quality", "sentiment": "positive" },
+      { "aspect": "temperature", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The pasta was okay, but the waiter’s attitude seasoned it badly.",
+    "expected": [
+      { "aspect": "pasta", "sentiment": "neutral" },
+      { "aspect": "waiter", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The manager’s apology felt more rehearsed than sincere.",
+    "expected": [
+      { "aspect": "apology", "sentiment": "negative" },
+      { "aspect": "manager", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The concert was unforgettable, mainly because my ears are still ringing.",
+    "expected": [
+      { "aspect": "concert", "sentiment": "negative" },
+      { "aspect": "sound volume", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The app notifications are so persistent they should pay rent.",
+    "expected": [
+      { "aspect": "notifications", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The breakfast buffet was decent, but the coffee tasted like burnt rubber.",
+    "expected": [
+      { "aspect": "buffet", "sentiment": "neutral" },
+      { "aspect": "coffee", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The new update fixed some bugs but added even more.",
+    "expected": [
+      { "aspect": "update", "sentiment": "negative" },
+      { "aspect": "bugs", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The view from the hotel room was stunning, too bad I couldn’t open the windows.",
+    "expected": [
+      { "aspect": "view", "sentiment": "positive" },
+      { "aspect": "windows", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The air fryer works perfectly, when it decides to turn on.",
+    "expected": [
+      { "aspect": "air fryer", "sentiment": "negative" },
+      { "aspect": "functionality", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The manager said 'I’ll handle it'—still waiting.",
+    "expected": [
+      { "aspect": "manager", "sentiment": "negative" },
+      { "aspect": "response time", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The shoes look great, but my feet disagree.",
+    "expected": [
+      { "aspect": "appearance", "sentiment": "positive" },
+      { "aspect": "comfort", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The restaurant was empty, which should’ve been my first warning sign.",
+    "expected": [
+      { "aspect": "restaurant", "sentiment": "negative" },
+      { "aspect": "popularity", "sentiment": "negative" }
+    ]
+  },
+  {
+    "text": "The new update improved nothing except my frustration levels.",
+    "expected": [
+      { "aspect": "update", "sentiment": "negative" },
+      { "aspect": "user experience", "sentiment": "negative" }
+    ]
   }
 ]

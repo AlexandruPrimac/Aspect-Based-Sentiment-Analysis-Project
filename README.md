@@ -143,15 +143,15 @@ All analyzers (LexiconABSA, TransformerABSA, OllamaABSA) inherit from ABSAAnalyz
 
 ---
 ##  Results Summary running the comparison.ipynb
-#### Evaluation Dataset(evaluation_data.json) (~6:30 minutes for the full comparison stage)
-- 75 sentences to analyze
+#### Evaluation Dataset(evaluation_data.json) (~8:30 minutes for the full comparison stage)
+- 108 sentences to analyze
 ```
 SUMMARY STATISTICS
 ================================================================================
    Implementation  Aspect Accuracy (%)  Sentiment Accuracy (%)  Total Predictions  Correct Sentiments
-    Lexicon-Based            68.939394               34.848485                124                  46
-Transformer-Based            81.818182               76.515152                436                 101
-     Ollama-Based            84.848485               81.060606                145                 107
+    Lexicon-Based            64.795918               27.551020                186                  54
+Transformer-Based            77.040816               65.816327                692                 129
+     Ollama-Based            83.163265               77.040816                207                 151
 ```
 #### Test Dataset(test_samples.json) (~1:45 minutes for the full comparison stage)
 - 25 sentences to analyze
