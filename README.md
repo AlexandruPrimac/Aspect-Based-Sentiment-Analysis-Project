@@ -56,10 +56,13 @@ python -m spacy download en_core_web_sm
 ```
 
 ## Dependencies
-- Category	Package	Description Core NLP	spacy, vaderSentiment	Used in LexiconABSA
-- Transformers	transformers, torch	Used in TransformerABSA
-- LLM Interface	requests, ollama (local server)	Used in OllamaABSA
-- Utilities	pandas, matplotlib (optional)	For analysis & visualization
+
+| Category | Packages | Description |
+|-----------|-----------|-------------|
+| Core NLP | `spacy`, `vaderSentiment` | Used in LexiconABSA |
+| Transformers | `transformers`, `torch` | Used in TransformerABSA |
+| LLM Interface | `requests`, **Ollama** (local server) | Used in OllamaABSA |
+| Utilities | `pandas`, `matplotlib` (optional) | For comparison and visualization |
 
 ### Notes
 Running Locally with Ollama (LLM ABSA)
