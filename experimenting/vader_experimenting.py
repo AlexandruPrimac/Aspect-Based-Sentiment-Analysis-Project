@@ -1,3 +1,6 @@
+"""
+In this directory I mainly tried to experiment how spacy, vader and the transformer works, before working on the actual implementation. Trying to inspect the code and output, so that I can understand how it works.
+"""
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 # --- examples -------
