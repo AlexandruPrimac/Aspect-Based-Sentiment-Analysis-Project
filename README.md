@@ -85,6 +85,17 @@ analyzer = TransformerABSA()  # Change here to test other implementations
 ### 2. Running the comparison.ipynb notebook to see a full comparison of the 3 implementations, using the test or evaluate data set.
 
 ---
+## Testing & Code Coverage
+Comprehensive unit tests were written for all three ABSA implementations using **Python’s `unittest`** framework.  
+Tests cover functionality, edge cases, and robustness against malformed inputs or empty outputs.
+
+| Implementation | Module Tested | Coverage (%) | Key Notes |
+|----------------|----------------|---------------|------------|
+| **Lexicon-Based ABSA** | `lexicon_absa.py` | **79%** | Most gaps from rare linguistic modifiers and emoji handling branches |
+| **Transformer-Based ABSA** | `transformer_absa.py` | **92%** | Highest coverage — includes aspect extraction, multi-aspect analysis, and sentiment prediction |
+| **LLM-Based ABSA (Ollama)** | `llm_absa.py` | **81%** | Covers retry logic, JSON parsing, and regex-based recovery of malformed outputs |
+
+---
 ## API Documentation
 Base Interface (src/base.py)
 
