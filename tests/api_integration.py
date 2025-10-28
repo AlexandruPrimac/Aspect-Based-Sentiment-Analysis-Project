@@ -54,7 +54,7 @@ def aspect_match(expected: str, predicted: str) -> bool:
     Uses lenient substring matching after normalization, since
     model outputs may include partial or rephrased versions.
     Example:
-        expected="battery life" and predicted="battery" -> match ✅
+        expected="battery life" and predicted="battery" -> match
     """
     e = normalize(expected)
     p = normalize(predicted)
@@ -156,7 +156,7 @@ def main():
                     print(
                         f"  Aspect: {exp_aspect:15s} | Expected: {exp_sent:8s} | Predicted: {pred_sent:8s} | {'✅' if correct_flag else '❌'}")
 
-                    # Optional debugging info — depends on which ABSA model was used
+                    # Optional debugging info, depends on which ABSA model was used
                     if hasattr(pred, "confidence") and pred.confidence is not None:
                         print(f"     Confidence: {pred.confidence:.2f}")
                     if hasattr(pred, "vader_breakdown") and pred.vader_breakdown:

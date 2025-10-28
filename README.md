@@ -27,7 +27,7 @@ Each implementation follows a **unified interface**, making it easy to swap and 
 ## Project Overview
 
 Aspect-Based Sentiment Analysis (ABSA) identifies *specific aspects* of a text (e.g., *“battery life”*, *“service”*) and determines the *sentiment polarity* (positive / negative / neutral) for each.  
-This project explores three distinct methodologies — from rule-based to deep learning to large language models — and compares their tradeoffs in **accuracy, interpretability, and robustness**.
+This project explores three distinct methodologies, from rule-based to deep learning to large language models, and compares their tradeoffs in **accuracy, interpretability, and robustness**.
 
 ---
 
@@ -83,11 +83,11 @@ analyzer = TransformerABSA()  # Change here to test other implementations
 Comprehensive unit tests were written for all three ABSA implementations using **Python’s `unittest`** framework.  
 Tests cover functionality, edge cases, and robustness against malformed inputs or empty outputs.
 
-| Implementation | Module Tested | Coverage (%) | Key Notes |
-|----------------|----------------|---------------|------------|
-| **Lexicon-Based ABSA** | `lexicon_absa.py` | **79%** | Most gaps from rare linguistic modifiers and emoji handling branches |
-| **Transformer-Based ABSA** | `transformer_absa.py` | **92%** | Highest coverage — includes aspect extraction, multi-aspect analysis, and sentiment prediction |
-| **LLM-Based ABSA (Ollama)** | `llm_absa.py` | **81%** | Covers retry logic, JSON parsing, and regex-based recovery of malformed outputs |
+| Implementation | Module Tested | Coverage (%) | Key Notes                                                                                     |
+|----------------|----------------|---------------|-----------------------------------------------------------------------------------------------|
+| **Lexicon-Based ABSA** | `lexicon_absa.py` | **79%** | Most gaps from rare linguistic modifiers and emoji handling branches                          |
+| **Transformer-Based ABSA** | `transformer_absa.py` | **92%** | Highest coverage, includes aspect extraction, multi-aspect analysis, and sentiment prediction |
+| **LLM-Based ABSA (Ollama)** | `llm_absa.py` | **81%** | Covers retry logic, JSON parsing, and regex-based recovery of malformed outputs               |
 
 ---
 ## API Documentation
@@ -120,7 +120,7 @@ class ABSAAnalyzer:
         raise NotImplementedError("Subclasses must implement this method.")
 ```
 
-All analyzers (LexiconABSA, TransformerABSA, OllamaABSA) inherit from ABSAAnalyzer and return a list of AspectSentiment objects — ensuring a unified API across all implementations.
+All analyzers (LexiconABSA, TransformerABSA, OllamaABSA) inherit from ABSAAnalyzer and return a list of AspectSentiment objects, ensuring a unified API across all implementations.
 
 ---
 ## Design Decisions & Rationale

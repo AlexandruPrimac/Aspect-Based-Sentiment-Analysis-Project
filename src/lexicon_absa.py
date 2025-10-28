@@ -55,7 +55,7 @@ class LexiconABSA(ABSAAnalyzer):
         doc = self.nlp(text)
         results = []
 
-        # STEP 1 — Aspect extraction via noun chunks
+        # STEP 1: Aspect extraction via noun chunks
         aspects = []
         for chunk in doc.noun_chunks:
             if not any(w.text.lower() in self.emoji_map.values() for w in chunk):
@@ -65,7 +65,7 @@ class LexiconABSA(ABSAAnalyzer):
             print(f"\nProcessed text: {text}")
             print("Extracted aspects:", [a.text for a in aspects])
 
-        # STEP 2 — Find opinion words related to aspects
+        # STEP 2: Find opinion words related to aspects
         pairs = []
         for token in doc:
             if token.dep_ == "amod" and token.head.pos_ in ("NOUN", "PROPN"):
@@ -82,7 +82,7 @@ class LexiconABSA(ABSAAnalyzer):
         if self.debug:
             print("Aspect-opinion pairs:", [(a.text, o.text) for a, o in pairs])
 
-        # STEP 3 — Compute sentiment for each aspect–opinion pair
+        # STEP 3: Compute sentiment for each aspect–opinion pair
         for aspect, opinion in pairs:
             opinion_phrase = " ".join(t.text for t in opinion.subtree)
             vader_scores = self.vader.polarity_scores(opinion_phrase)
@@ -134,7 +134,7 @@ class LexiconABSA(ABSAAnalyzer):
             )
             results.append(result)
 
-        # STEP 4 — Aggregate results (keep highest-confidence per aspect)
+        # STEP 4: Aggregate results (keep highest-confidence per aspect)
         final_results = aggregate_results(results)
 
         if self.debug:

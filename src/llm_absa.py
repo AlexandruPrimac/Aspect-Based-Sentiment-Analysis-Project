@@ -103,7 +103,7 @@ class OllamaABSA(ABSAAnalyzer):
         content = ""  # Will hold the raw model response
         last_error = None # Track the last error for reporting
 
-        # Retry mechanism — useful if the model or API occasionally fails
+        # Retry mechanism, useful if the model or API occasionally fails
         for attempt in range(self.max_retries):
             try:
                 print(f" Attempt {attempt + 1}/{self.max_retries}...")
@@ -181,5 +181,5 @@ class OllamaABSA(ABSAAnalyzer):
             else:
                 print(f" Skipping malformed aspect: {a}")
 
-        # Final structured output — ready for evaluation or display
+        # Final structured output, ready for evaluation or display
         return parsed
